@@ -8,11 +8,14 @@
 
 import UIKit
 import AudioToolbox
-//import AVFoundation
+import AVFoundation
 
 class ViewController: UIViewController{
 
-//    var audioPlayer: AVAudioPlayer?
+    var audioPlayer: AVAudioPlayer!
+    var selectedSound: String = ""
+
+    let soundArray = ["note1", "note2", "note3", "note4", "note5", "note6", "note7"]
 
     
     override func viewDidLoad() {
@@ -21,25 +24,22 @@ class ViewController: UIViewController{
 
     @IBAction func notePressed(_ sender: UIButton) {
         
-//        let xylophoneSound = Bundle.main.url(forResource: "note\(sender.tag)", withExtension: "wav")!
-//
-//        do {
-//            audioPlayer = try AVAudioPlayer(contentsOf: xylophoneSound)
-//            guard let audioPlayer = audioPlayer else { return }
-//
-//            audioPlayer.prepareToPlay()
-//            audioPlayer.play()
-//        } catch let error as Error {
-//            print(error)
-//        }
-        
-        if let soundUrl = Bundle.main.url(forResource: "note\(sender.tag)", withExtension: "wav"){
-            var mySound: SystemSoundID = 0
-            AudioServicesCreateSystemSoundID(soundUrl as CFURL, &mySound)
-            //Play
-            AudioServicesPlaySystemSound(mySound)
-        }
-        
+        playSound(note: soundArray[sender.tag - 1])
         
     }
+    
+    func playSound(note: String) {
+        let xylophoneSound = Bundle.main.url(forResource: note, withExtension: "wav")!
+        
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: xylophoneSound)
+            guard let audioPlayer = audioPlayer else { return }
+            
+            audioPlayer.prepareToPlay()
+            audioPlayer.play()
+        } catch  {
+            print(error)
+        }
+    }
+    
 }
